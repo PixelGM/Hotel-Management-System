@@ -133,11 +133,12 @@ class ExampleLayer : public Walnut::Layer
 private:
 	// This is the single line you need to modify when adding a new room.
 	// Just add a new entry into the roomInfos vector.
-	// Add Room here
+	// Add Rooms here
 	std::vector<std::pair<const char*, std::string>> roomInfos = {
 		{"Room 1", "Hotel A Box - Room 1"},
 		{"Room 2", "Hotel A Box - Room 2"},
-		{"Room 3", "Hotel A Box - Room 3"}
+		{"Room 3", "Hotel A Box - Room 3"},
+		{"Room 4", "Hotel A Box - Room 4"}
 		// Add more rooms here...
 	};
 
