@@ -14,30 +14,32 @@
 // Using the library's namespace for brevity
 using json = nlohmann::json;
 
-void SaveToFile(const char* filename, const char* clientName, const char* clientID) {
-	json j;
-	j["Client Name"] = clientName;
-	j["Client ID"] = clientID;
+// Global JSON object to hold all client data
+json allClients;
 
-	std::ofstream file(filename);
+void SaveToFile(const char* roomFileName, const char* clientName, const char* clientID) {
+	allClients[roomFileName]["Client Name"] = clientName;
+	allClients[roomFileName]["Client ID"] = clientID;
+
+	std::ofstream file("AllClients.json");
 	if (file.is_open()) {
-		file << j.dump(); // Convert the JSON object to a string and write it to the file
+		file << allClients.dump();
 		file.close();
 	}
 }
 
-void LoadFromFile(const char* filename, char* clientNameBuffer, char* clientIDBuffer) {
-	std::ifstream file(filename);
+void LoadFromFile(const char* roomFileName, char* clientNameBuffer, char* clientIDBuffer) {
+	std::ifstream file("AllClients.json");
 	if (file.is_open()) {
-		json j;
-		file >> j; // Load the JSON object from the file
+		file >> allClients;
 
-		strcpy(clientNameBuffer, j["Client Name"].get<std::string>().c_str());
-		strcpy(clientIDBuffer, j["Client ID"].get<std::string>().c_str());
+		strcpy(clientNameBuffer, allClients[roomFileName]["Client Name"].get<std::string>().c_str());
+		strcpy(clientIDBuffer, allClients[roomFileName]["Client ID"].get<std::string>().c_str());
 
 		file.close();
 	}
 }
+
 
 
 class Room
