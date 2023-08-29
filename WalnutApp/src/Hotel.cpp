@@ -99,7 +99,6 @@ public:
 				}
 			}
 
-
 			if (ImGui::Button("Manually Load Data"))
 			{
 				LoadFromFile(filename, clientName, clientID);
@@ -172,7 +171,6 @@ public:
 		ImGui::Begin("Hotel A");
 
 		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-		ImGui::NewFrame();
 		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f)))
 		{
 			room1.ToggleRoomWindowVisibility();
