@@ -134,9 +134,9 @@ private:
 	// Just add a new entry into the roomInfos vector.
 	// Add Room here
 	std::vector<std::pair<const char*, std::string>> roomInfos = {
-		{"clientDataRoom1.json", "Hotel A Box - Room 1"},
-		{"clientDataRoom2.json", "Hotel A Box - Room 2"},
-		{"clientDataRoom3.json", "Hotel A Box - Room 3"}
+		{"Room 1", "Hotel A Box - Room 1"},
+		{"Room 2", "Hotel A Box - Room 2"},
+		{"Room 3", "Hotel A Box - Room 3"}
 		// Add more rooms here...
 	};
 
