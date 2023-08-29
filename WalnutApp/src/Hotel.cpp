@@ -44,6 +44,7 @@ class ExampleLayer : public Walnut::Layer
 {
 private:
 	bool showRoom1Window = false;
+	bool firstOpen = true;
 	char clientName[256] = "";
 	char clientID[256] = "";
 public:
@@ -100,28 +101,12 @@ public:
 				return;
 			}
 
-			// You can put content for this window here.
-			/*ImGui::Text("Client Name: %s", dBuf);
-
-			if (ImGui::InputText("Insert Client Name", buf, IM_ARRAYSIZE(buf)));
-
-			if (ImGui::Button("Set"))
+	
+			if (firstOpen)
 			{
-				strcpy(dBuf, buf);
-				SaveToFile(filename, dBuf);
+				LoadFromFile(filename, clientName, clientID);
+				firstOpen = false; // Set the flag to false so we don't load again unless the window is reopened
 			}
-
-
-
-			ImGui::Text("Client ID: %s", dBuf2);
-
-			if (ImGui::InputText("Insert Client ID", buf2, IM_ARRAYSIZE(buf)));
-
-			if (ImGui::Button("Set"))
-			{
-				strcpy(dBuf2, buf2);
-				SaveToFile(filename, dBuf2);
-			}*/
 
 			if (ImGui::InputText("Insert Client Name", clientName, IM_ARRAYSIZE(clientName)));
 			if (ImGui::InputText("Insert Client ID", clientID, IM_ARRAYSIZE(clientID)));
@@ -130,12 +115,16 @@ public:
 				SaveToFile(filename, clientName, clientID);
 			}
 
-			if (ImGui::Button("Load Data")) {
+			if (ImGui::Button("Manually Load Data")) {
 				LoadFromFile(filename, clientName, clientID);
 			}
 
 
 			ImGui::End();
+		}
+		else
+		{
+			firstOpen = true; // Reset the flag when the window is closed
 		}
 
 	}
