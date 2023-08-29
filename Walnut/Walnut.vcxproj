@@ -150,6 +150,7 @@
     <ClInclude Include="src\Walnut\Image.h" />
     <ClInclude Include="src\Walnut\Input\Input.h" />
     <ClInclude Include="src\Walnut\Input\KeyCodes.h" />
+    <ClInclude Include="src\Walnut\json.hpp" />
     <ClInclude Include="src\Walnut\Layer.h" />
     <ClInclude Include="src\Walnut\Random.h" />
     <ClInclude Include="src\Walnut\Timer.h" />
