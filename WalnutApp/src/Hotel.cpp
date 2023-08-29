@@ -128,25 +128,19 @@ public:
 class ExampleLayer : public Walnut::Layer
 {
 private:
-	std::array<Room, 3> rooms;
-	const char* roomsStateFilename;
-	std::array<std::string, 3> roomTitles;
-
-public:
-	ExampleLayer(const std::vector<std::string>& filenames, const char* stateFilename, const std::array<std::string, 3>& titles)
-		: roomsStateFilename(stateFilename), roomTitles(titles)
-	{
-		for (size_t i = 0; i < rooms.size(); i++)
-			rooms[i] = Room(filenames[i].c_str());
-
-		LoadAllRoomStates();
-	}
+	std::array<Room, 3> rooms{
+		Room("clientDataRoom1.json"),
+			Room("clientDataRoom2.json"),
+			Room("clientDataRoom3.json")
+	};
+	const char* roomsStateFilename = "roomStates.json";
 
 	void SaveAllRoomStates()
 	{
 		json j;
-		for (size_t i = 0; i < rooms.size(); i++)
-			j["room" + std::to_string(i + 1)] = rooms[i].IsWindowOpen();
+		j["room1"] = rooms[0].IsWindowOpen();
+		j["room2"] = rooms[1].IsWindowOpen();
+		j["room3"] = rooms[2].IsWindowOpen();
 
 		std::ofstream file(roomsStateFilename);
 		if (file.is_open())
@@ -163,17 +157,37 @@ public:
 		{
 			json j;
 			file >> j;
+
 			for (size_t i = 0; i < rooms.size(); i++)
+			{
 				rooms[i].SetWindowOpenState(j["room" + std::to_string(i + 1)].get<bool>());
+			}
 
 			file.close();
 		}
+	}
+
+public:
+	ExampleLayer()
+	{
+		LoadAllRoomStates();
+	}
+
+	void DrawRoomWindowFor(Room& room, const std::string& title)
+	{
+		room.DrawRoomWindow(title.c_str(), [this]() { SaveAllRoomStates(); });
 	}
 
 	virtual void OnUIRender() override
 	{
 		float windowWidth = ImGui::GetWindowWidth();
 		ImGui::Begin("Hotel A");
+
+		const std::array<std::string, 3> roomTitles = {
+			"Hotel A Box - Room 1",
+			"Hotel A Box - Room 2",
+			"Hotel A Box - Room 3"
+		};
 
 		for (size_t i = 0; i < rooms.size(); i++)
 		{
@@ -184,52 +198,23 @@ public:
 				rooms[i].ToggleRoomWindowVisibility();
 				SaveAllRoomStates();
 			}
-			if (i != rooms.size() - 1)
+
+			if (i != rooms.size() - 1) // If not the last room button
 				ImGui::SameLine();
 		}
 
 		ImGui::End();
 
 		for (size_t i = 0; i < rooms.size(); i++)
-			rooms[i].DrawRoomWindow(roomTitles[i].c_str(), [this]() { SaveAllRoomStates(); });
+		{
+			DrawRoomWindowFor(rooms[i], roomTitles[i]);
+		}
 	}
 };
 
+
+
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
-{
-	Walnut::ApplicationSpecification spec;
-	spec.Name = "Walnut Example";
-
-	std::vector<std::string> filenames = {
-		"clientDataRoom1.json",
-		"clientDataRoom2.json",
-		"clientDataRoom3.json"
-	};
-
-	const char* stateFilename = "roomStates.json";
-	std::array<std::string, 3> roomTitles = {
-		"Hotel A Box - Room 1",
-		"Hotel A Box - Room 2",
-		"Hotel A Box - Room 3"
-	};
-
-	Walnut::Application* app = new Walnut::Application(spec);
-	app->PushLayer<ExampleLayer>(filenames, stateFilename, roomTitles);
-	app->SetMenubarCallback([app]()
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("Exit"))
-					app->Close();
-				ImGui::EndMenu();
-			}
-		});
-	return app;
-}
-
-
-
-
 {
 	Walnut::ApplicationSpecification spec;
 	spec.Name = "Walnut Example";
