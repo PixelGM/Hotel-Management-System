@@ -99,10 +99,10 @@ public:
 				}
 			}
 
-			if (ImGui::Button("Manually Load Data"))
+			/*if (ImGui::Button("Manually Load Data"))
 			{
 				LoadFromFile(filename, clientName, clientID);
-			}
+			}*/
 
 			ImGui::End();
 
