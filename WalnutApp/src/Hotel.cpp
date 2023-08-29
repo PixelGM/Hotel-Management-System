@@ -124,16 +124,33 @@ public:
 };
 
 
-
+// int main()
 class ExampleLayer : public Walnut::Layer
 {
 private:
-	std::array<Room, 3> rooms{
-		Room("clientDataRoom1.json"),
-			Room("clientDataRoom2.json"),
-			Room("clientDataRoom3.json")
+	// This is the single line you need to modify when adding a new room.
+	// Just add a new entry into the roomInfos vector.
+	std::vector<std::pair<const char*, std::string>> roomInfos = {
+		{"clientDataRoom1.json", "Hotel A Box - Room 1"},
+		{"clientDataRoom2.json", "Hotel A Box - Room 2"},
+		{"clientDataRoom3.json", "Hotel A Box - Room 3"}
+		// Add more rooms here...
 	};
+
+	std::vector<Room> rooms;
 	const char* roomsStateFilename = "roomStates.json";
+	
+
+public:
+	ExampleLayer()
+	{
+		for (const auto& info : roomInfos)
+		{
+			rooms.emplace_back(info.first);
+		}
+
+		LoadAllRoomStates();
+	}
 
 	void SaveAllRoomStates()
 	{
@@ -167,12 +184,6 @@ private:
 		}
 	}
 
-public:
-	ExampleLayer()
-	{
-		LoadAllRoomStates();
-	}
-
 	void DrawRoomWindowFor(Room& room, const std::string& title)
 	{
 		room.DrawRoomWindow(title.c_str(), [this]() { SaveAllRoomStates(); });
@@ -183,13 +194,7 @@ public:
 		float windowWidth = ImGui::GetWindowWidth();
 		ImGui::Begin("Hotel A");
 
-		const std::array<std::string, 3> roomTitles = {
-			"Hotel A Box - Room 1",
-			"Hotel A Box - Room 2",
-			"Hotel A Box - Room 3"
-		};
-
-		for (size_t i = 0; i < rooms.size(); i++)
+		for (size_t i = 0; i < rooms.size(); ++i)
 		{
 			ImGui::SetCursorPosX(windowWidth / 2.0f - (rooms.size() * 75.0f / 2.0f) + (i * 75.0f));
 
@@ -199,17 +204,18 @@ public:
 				SaveAllRoomStates();
 			}
 
-			if (i != rooms.size() - 1) // If not the last room button
+			if (i != rooms.size() - 1)
 				ImGui::SameLine();
 		}
 
 		ImGui::End();
 
-		for (size_t i = 0; i < rooms.size(); i++)
+		for (size_t i = 0; i < rooms.size(); ++i)
 		{
-			DrawRoomWindowFor(rooms[i], roomTitles[i]);
+			rooms[i].DrawRoomWindow(roomInfos[i].second.c_str(), [this]() { SaveAllRoomStates(); });
 		}
 	}
+
 };
 
 
