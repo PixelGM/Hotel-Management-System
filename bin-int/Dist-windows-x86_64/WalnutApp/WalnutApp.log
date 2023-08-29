@@ -1,0 +1,28 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (..\bin-int\Dist-windows-x86_64\Walnut\) contains files shared from another project (Walnut.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Hotel.cpp
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(27,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(28,2): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(66,5): error C3861: 'LoadFromFile': identifier not found
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(75,5): error C3861: 'SaveToFile': identifier not found
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(128,27): error C2065: 'roomInfos': undeclared identifier
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(128,1): error C2530: 'info': references must be initialized
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(128,1): error C3531: 'info': a symbol whose type contains 'auto' must have an initializer
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(128,25): error C2143: syntax error: missing ';' before ':'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(128,36): error C2143: syntax error: missing ';' before ')'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(130,9): error C2672: 'std::vector<Room,std::allocator<Room>>::emplace_back': no matching overloaded function found
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.36.32532\include\vector(860,33): message : could be 'decltype(auto) std::vector<Room,std::allocator<Room>>::emplace_back(_Valty &&...)'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(139,49): error C2039: 'GetClientName': is not a member of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(33,7): message : see declaration of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(139,75): error C2039: 'GetClientID': is not a member of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(33,7): message : see declaration of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(139,25): error C2660: 'SaveRoomToJson': function does not take 2 arguments
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(17,6): message : see declaration of 'SaveRoomToJson'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(139,25): message : while trying to match the argument list '()'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(160,47): error C2039: 'GetClientNameBuffer': is not a member of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(33,7): message : see declaration of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(160,79): error C2039: 'GetClientIDBuffer': is not a member of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(33,7): message : see declaration of 'Room'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(160,6): error C2660: 'LoadRoomFromJson': function does not take 2 arguments
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(26,6): message : see declaration of 'LoadRoomFromJson'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(160,6): message : while trying to match the argument list '(nlohmann::json_abi_v3_11_2::basic_json<std::map,std::vector,std::string,bool,int64_t,uint64_t,double,std::allocator,nlohmann::json_abi_v3_11_2::adl_serializer,std::vector<uint8_t,std::allocator<uint8_t>>>, bool)'
+C:\Users\amosp\Desktop\Hotel-Management-System\WalnutApp\src\Hotel.cpp(202,28): error C2065: 'roomInfos': undeclared identifier
