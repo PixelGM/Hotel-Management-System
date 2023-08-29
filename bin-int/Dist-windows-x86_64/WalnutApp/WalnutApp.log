@@ -1,0 +1,4 @@
+﻿  Hotel.cpp
+C:\Users\amosp\Downloads\Hotel-Management-System\WalnutApp\src\Hotel.cpp(35,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\amosp\Downloads\Hotel-Management-System\WalnutApp\src\Hotel.cpp(36,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  WalnutApp.vcxproj -> C:\Users\amosp\Downloads\Hotel-Management-System\bin\Dist-windows-x86_64\WalnutApp\WalnutApp.exe
