@@ -130,6 +130,7 @@ class ExampleLayer : public Walnut::Layer
 private:
 	// This is the single line you need to modify when adding a new room.
 	// Just add a new entry into the roomInfos vector.
+	// Add Room here
 	std::vector<std::pair<const char*, std::string>> roomInfos = {
 		{"clientDataRoom1.json", "Hotel A Box - Room 1"},
 		{"clientDataRoom2.json", "Hotel A Box - Room 2"},
@@ -155,9 +156,11 @@ public:
 	void SaveAllRoomStates()
 	{
 		json j;
-		j["room1"] = rooms[0].IsWindowOpen();
-		j["room2"] = rooms[1].IsWindowOpen();
-		j["room3"] = rooms[2].IsWindowOpen();
+
+		for (size_t i = 0; i < rooms.size(); ++i)
+		{
+			j["room" + std::to_string(i + 1)] = rooms[i].IsWindowOpen();
+		}
 
 		std::ofstream file(roomsStateFilename);
 		if (file.is_open())
@@ -175,14 +178,18 @@ public:
 			json j;
 			file >> j;
 
-			for (size_t i = 0; i < rooms.size(); i++)
+			for (size_t i = 0; i < rooms.size(); ++i)
 			{
-				rooms[i].SetWindowOpenState(j["room" + std::to_string(i + 1)].get<bool>());
+				if (j.find("room" + std::to_string(i + 1)) != j.end())  // check if key exists
+				{
+					rooms[i].SetWindowOpenState(j["room" + std::to_string(i + 1)].get<bool>());
+				}
 			}
 
 			file.close();
 		}
 	}
+
 
 	void DrawRoomWindowFor(Room& room, const std::string& title)
 	{
