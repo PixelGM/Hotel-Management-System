@@ -1,0 +1,8 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (..\bin-int\Debug-windows-x86_64\Walnut\) contains files shared from another project (Walnut.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Application.cpp
+  ImGuiBuild.cpp
+  Image.cpp
+  Input.cpp
+  Random.cpp
+  Generating Code...
+  Walnut.vcxproj -> C:\Users\amosp\Desktop\Hotel-Management-System\Walnut\bin\Debug-windows-x86_64\Walnut\Walnut.lib
