@@ -10,37 +10,52 @@
 class ExampleLayer : public Walnut::Layer
 {
 public:
-    // Code here
-    virtual void OnUIRender() override
-    {
-        float windowWidth = ImGui::GetWindowWidth();
+	// Code here
+	virtual void OnUIRender() override
+	{
+		bool showRoom1Window = false;
+		float windowWidth = ImGui::GetWindowWidth();
 
-        // First Window: Hotel A
-        ImGui::Begin("Hotel A");
-        ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-        RenderRoomButtons();
-        ImGui::End();
+		//ImGui::Begin("Hello");
+		ImGui::Begin("Hotel A");
 
-        // Second Window: Hotel B
-        ImGui::Begin("Hotel B");
-        ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-        RenderRoomButtons();
-        ImGui::End();
-    }
+		// Set the cursor X position to center the button. (Set Margin)
+		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
 
-    void RenderRoomButtons()
-    {
-        const char* rooms[] = { "Room 1", "Room 2", "Room 3", "Room 4", "Room 5", "Room 6",
-                               "Room A", "Room B", "Room C", "Room D", "Room E", "Room F" };
-        for (int i = 0; i < 12; ++i)
-        {
-            if (i != 0 && i != 6) ImGui::SameLine();
-            ImGui::Button(rooms[i], ImVec2(75.0f, 0.0f));
-        }
-    }
+		ImGui::Button("Room 1", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room 2", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room 3", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room 4", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room 5", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room 6", ImVec2(75.0f, 0.0f));
+		
+		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
+		ImGui::Button("Room A", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room B", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room C", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room D", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room E", ImVec2(75.0f, 0.0f));
+		ImGui::SameLine();
+		ImGui::Button("Room F", ImVec2(75.0f, 0.0f));
+
+
+
+		ImGui::End();
+
+		//ImGui::Begin("Hotel 6");
+
+		//ImGui::Begin("Dear ImGui Style Editor", &showRoom1Window);
+	}
 };
-
-
 
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
 {
