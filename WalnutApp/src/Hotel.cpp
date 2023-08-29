@@ -61,7 +61,7 @@ public:
 	bool IsWindowOpen() const { return showRoomWindow; }
 	void SetWindowOpenState(bool openState) { showRoomWindow = openState; }
 
-	void DrawRoomWindow(const char* roomTitle)
+	void DrawRoomWindow(const char* roomTitle, std::function<void()> saveStatesCallback)
 	{
 		if (showRoomWindow)
 		{
@@ -105,6 +105,11 @@ public:
 			}
 
 			ImGui::End();
+
+			if (!showRoomWindow)  // This means the window was closed during this frame
+			{
+				saveStatesCallback();
+			}
 		}
 		else
 		{
@@ -191,9 +196,9 @@ public:
 
 		ImGui::End();
 
-		room1.DrawRoomWindow("Hotel A Box - Room 1");
-		room2.DrawRoomWindow("Hotel A Box - Room 2");
-		room3.DrawRoomWindow("Hotel A Box - Room 3");
+		room1.DrawRoomWindow("Hotel A Box - Room 1", [this]() { this->SaveAllRoomStates(); });
+		room2.DrawRoomWindow("Hotel A Box - Room 2", [this]() { this->SaveAllRoomStates(); });
+		room3.DrawRoomWindow("Hotel A Box - Room 3", [this]() { this->SaveAllRoomStates(); });
 	}
 };
 
