@@ -43,6 +43,12 @@ void LoadFromFile(const char* filename, char* clientNameBuffer, char* clientIDBu
 class Room
 {
 private:
+
+	// Notification
+	bool showSaveNotification = false;
+	float notificationDuration = 1.0f;  // Display notification for 1 second
+	float notificationTimer = 0.0f;
+
 	const char* filename;
 	bool showRoomWindow = false;
 	bool firstOpen = true;
@@ -77,7 +83,22 @@ public:
 			if (ImGui::Button("Save Data"))
 			{
 				SaveToFile(filename, clientName, clientID);
+				showSaveNotification = true; // Set the flag when data is saved
+				notificationTimer = 0.0f;   // Reset the timer
 			}
+
+			// Handle the save notification
+			if (showSaveNotification)
+			{
+				ImGui::Text("Saved!");
+				notificationTimer += ImGui::GetIO().DeltaTime; // Increment the timer
+
+				if (notificationTimer > notificationDuration)
+				{
+					showSaveNotification = false; // Turn off notification after the desired duration
+				}
+			}
+
 
 			if (ImGui::Button("Manually Load Data"))
 			{
@@ -151,6 +172,7 @@ public:
 		ImGui::Begin("Hotel A");
 
 		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
+		ImGui::NewFrame();
 		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f)))
 		{
 			room1.ToggleRoomWindowVisibility();
