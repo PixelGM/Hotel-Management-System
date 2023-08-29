@@ -17,6 +17,7 @@ using json = nlohmann::json;
 // Global JSON object to hold all client data
 json allClients;
 
+// Save client data to a JSON file
 void SaveToFile(const char* roomFileName, const char* clientName, const char* clientID) {
 	allClients[roomFileName]["Client Name"] = clientName;
 	allClients[roomFileName]["Client ID"] = clientID;
@@ -28,17 +29,17 @@ void SaveToFile(const char* roomFileName, const char* clientName, const char* cl
 	}
 }
 
+// Load client data from a JSON file
 void LoadFromFile(const char* roomFileName, char* clientNameBuffer, char* clientIDBuffer) {
 	std::ifstream file("AllClients.json");
 	if (file.is_open()) {
 		file >> allClients;
-
 		strcpy(clientNameBuffer, allClients[roomFileName]["Client Name"].get<std::string>().c_str());
 		strcpy(clientIDBuffer, allClients[roomFileName]["Client ID"].get<std::string>().c_str());
-
 		file.close();
 	}
 }
+
 
 
 
