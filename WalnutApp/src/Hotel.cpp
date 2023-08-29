@@ -125,7 +125,7 @@ public:
 
 		room1.DrawRoomWindow("Hotel A Box - Room 1");
 		room2.DrawRoomWindow("Hotel A Box - Room 2");
-		room3.DrawRoomWindow("Hotel A Box - Room 2");
+		room3.DrawRoomWindow("Hotel A Box - Room 3");
 		//roomX.DrawRoomWindow("Hotel A Box - Room X");
 		//...
 	}
