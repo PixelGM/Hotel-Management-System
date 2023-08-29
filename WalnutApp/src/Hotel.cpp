@@ -40,68 +40,28 @@ void LoadFromFile(const char* filename, char* clientNameBuffer, char* clientIDBu
 }
 
 
-class ExampleLayer : public Walnut::Layer
+class Room
 {
 private:
-	bool showRoom1Window = false;
+	const char* filename;
+	bool showRoomWindow = false;
 	bool firstOpen = true;
 	char clientName[256] = "";
 	char clientID[256] = "";
+
 public:
-	// Code here
-	virtual void OnUIRender() override
+	Room(const char* roomFileName) : filename(roomFileName) {}
+
+	void DrawRoomWindow(const char* roomTitle)
 	{
-		float windowWidth = ImGui::GetWindowWidth();
-
-		//ImGui::Begin("Hello");
-		ImGui::Begin("Hotel A");
-
-		// Set the cursor X position to center the button. (Set Margin)
-		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-
-		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f)))
+		if (showRoomWindow)
 		{
-			showRoom1Window = true;
-		}
-		
-		ImGui::SameLine();
-		ImGui::Button("Room 2", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room 3", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room 4", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room 5", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room 6", ImVec2(75.0f, 0.0f));
-		
-		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-		ImGui::Button("Room A", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room B", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room C", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room D", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room E", ImVec2(75.0f, 0.0f));
-		ImGui::SameLine();
-		ImGui::Button("Room F", ImVec2(75.0f, 0.0f));
-
-
-
-		ImGui::End();
-
-		const char* filename = "clientData.json";
-		if (showRoom1Window)
-		{
-			if (!ImGui::Begin("Hotel A Box", &showRoom1Window)) // Allow closing of the new window by pressing its close button
+			if (!ImGui::Begin(roomTitle, &showRoomWindow)) // Allow closing of the window by pressing its close button
 			{
 				ImGui::End();
 				return;
 			}
 
-	
 			if (firstOpen)
 			{
 				LoadFromFile(filename, clientName, clientID);
@@ -111,14 +71,15 @@ public:
 			if (ImGui::InputText("Insert Client Name", clientName, IM_ARRAYSIZE(clientName)));
 			if (ImGui::InputText("Insert Client ID", clientID, IM_ARRAYSIZE(clientID)));
 
-			if (ImGui::Button("Save Data")) {
+			if (ImGui::Button("Save Data"))
+			{
 				SaveToFile(filename, clientName, clientID);
 			}
 
-			if (ImGui::Button("Manually Load Data")) {
+			if (ImGui::Button("Manually Load Data"))
+			{
 				LoadFromFile(filename, clientName, clientID);
 			}
-
 
 			ImGui::End();
 		}
@@ -126,7 +87,47 @@ public:
 		{
 			firstOpen = true; // Reset the flag when the window is closed
 		}
+	}
 
+	void ToggleRoomWindowVisibility()
+	{
+		showRoomWindow = !showRoomWindow;
+	}
+};
+
+
+class ExampleLayer : public Walnut::Layer
+{
+private:
+	Room room1{ "clientDataRoom1.json" }; // Now, you can easily instantiate other rooms like room2, room3...
+	Room room2{ "clientDataRoom2.json"};
+	Room room3{ "clientDataRoom3.json"};
+	//...
+
+public:
+	virtual void OnUIRender() override
+	{
+		float windowWidth = ImGui::GetWindowWidth();
+		ImGui::Begin("Hotel A");
+
+		// Set the cursor X position to center the button. (Set Margin)
+		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
+
+		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f))) { room1.ToggleRoomWindowVisibility(); }
+		ImGui::SameLine();
+		if (ImGui::Button("Room 2", ImVec2(75.0f, 0.0f))) { room2.ToggleRoomWindowVisibility(); }
+		ImGui::SameLine();
+		if (ImGui::Button("Room 3", ImVec2(75.0f, 0.0f))) { room3.ToggleRoomWindowVisibility(); }
+
+		// Here you can easily integrate other rooms' buttons and windows as needed...
+
+		ImGui::End();
+
+		room1.DrawRoomWindow("Hotel A Box - Room 1");
+		room2.DrawRoomWindow("Hotel A Box - Room 2");
+		room3.DrawRoomWindow("Hotel A Box - Room 2");
+		//roomX.DrawRoomWindow("Hotel A Box - Room X");
+		//...
 	}
 };
 
