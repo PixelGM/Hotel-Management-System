@@ -52,11 +52,14 @@ private:
 public:
 	Room(const char* roomFileName) : filename(roomFileName) {}
 
+	bool IsWindowOpen() const { return showRoomWindow; }
+	void SetWindowOpenState(bool openState) { showRoomWindow = openState; }
+
 	void DrawRoomWindow(const char* roomTitle)
 	{
 		if (showRoomWindow)
 		{
-			if (!ImGui::Begin(roomTitle, &showRoomWindow)) // Allow closing of the window by pressing its close button
+			if (!ImGui::Begin(roomTitle, &showRoomWindow))
 			{
 				ImGui::End();
 				return;
@@ -65,11 +68,11 @@ public:
 			if (firstOpen)
 			{
 				LoadFromFile(filename, clientName, clientID);
-				firstOpen = false; // Set the flag to false so we don't load again unless the window is reopened
+				firstOpen = false;
 			}
 
-			if (ImGui::InputText("Insert Client Name", clientName, IM_ARRAYSIZE(clientName)));
-			if (ImGui::InputText("Insert Client ID", clientID, IM_ARRAYSIZE(clientID)));
+			ImGui::InputText("Insert Client Name", clientName, IM_ARRAYSIZE(clientName));
+			ImGui::InputText("Insert Client ID", clientID, IM_ARRAYSIZE(clientID));
 
 			if (ImGui::Button("Save Data"))
 			{
@@ -85,7 +88,7 @@ public:
 		}
 		else
 		{
-			firstOpen = true; // Reset the flag when the window is closed
+			firstOpen = true;
 		}
 	}
 
@@ -96,40 +99,84 @@ public:
 };
 
 
+
 class ExampleLayer : public Walnut::Layer
 {
 private:
-	Room room1{ "clientDataRoom1.json" }; // Now, you can easily instantiate other rooms like room2, room3...
-	Room room2{ "clientDataRoom2.json"};
-	Room room3{ "clientDataRoom3.json"};
-	//...
+	Room room1{ "clientDataRoom1.json" };
+	Room room2{ "clientDataRoom2.json" };
+	Room room3{ "clientDataRoom3.json" };
+	const char* roomsStateFilename = "roomStates.json";
+
+	void SaveAllRoomStates()
+	{
+		json j;
+		j["room1"] = room1.IsWindowOpen();
+		j["room2"] = room2.IsWindowOpen();
+		j["room3"] = room3.IsWindowOpen();
+
+		std::ofstream file(roomsStateFilename);
+		if (file.is_open())
+		{
+			file << j.dump();
+			file.close();
+		}
+	}
+
+	void LoadAllRoomStates()
+	{
+		std::ifstream file(roomsStateFilename);
+		if (file.is_open())
+		{
+			json j;
+			file >> j;
+
+			room1.SetWindowOpenState(j["room1"].get<bool>());
+			room2.SetWindowOpenState(j["room2"].get<bool>());
+			room3.SetWindowOpenState(j["room3"].get<bool>());
+
+			file.close();
+		}
+	}
 
 public:
+	ExampleLayer()
+	{
+		LoadAllRoomStates();
+	}
+
 	virtual void OnUIRender() override
 	{
 		float windowWidth = ImGui::GetWindowWidth();
 		ImGui::Begin("Hotel A");
 
-		// Set the cursor X position to center the button. (Set Margin)
 		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-
-		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f))) { room1.ToggleRoomWindowVisibility(); }
+		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f)))
+		{
+			room1.ToggleRoomWindowVisibility();
+			SaveAllRoomStates();
+		}
 		ImGui::SameLine();
-		if (ImGui::Button("Room 2", ImVec2(75.0f, 0.0f))) { room2.ToggleRoomWindowVisibility(); }
+		if (ImGui::Button("Room 2", ImVec2(75.0f, 0.0f)))
+		{
+			room2.ToggleRoomWindowVisibility();
+			SaveAllRoomStates();
+		}
 		ImGui::SameLine();
-		if (ImGui::Button("Room 3", ImVec2(75.0f, 0.0f))) { room3.ToggleRoomWindowVisibility(); }
-
-		// Here you can easily integrate other rooms' buttons and windows as needed...
+		if (ImGui::Button("Room 3", ImVec2(75.0f, 0.0f)))
+		{
+			room3.ToggleRoomWindowVisibility();
+			SaveAllRoomStates();
+		}
 
 		ImGui::End();
 
 		room1.DrawRoomWindow("Hotel A Box - Room 1");
 		room2.DrawRoomWindow("Hotel A Box - Room 2");
 		room3.DrawRoomWindow("Hotel A Box - Room 3");
-		//roomX.DrawRoomWindow("Hotel A Box - Room X");
-		//...
 	}
 };
+
 
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
 {
