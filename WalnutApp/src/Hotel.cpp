@@ -128,17 +128,19 @@ public:
 class ExampleLayer : public Walnut::Layer
 {
 private:
-	Room room1{ "clientDataRoom1.json" };
-	Room room2{ "clientDataRoom2.json" };
-	Room room3{ "clientDataRoom3.json" };
+	std::array<Room, 3> rooms{
+		Room("clientDataRoom1.json"),
+			Room("clientDataRoom2.json"),
+			Room("clientDataRoom3.json")
+	};
 	const char* roomsStateFilename = "roomStates.json";
 
 	void SaveAllRoomStates()
 	{
 		json j;
-		j["room1"] = room1.IsWindowOpen();
-		j["room2"] = room2.IsWindowOpen();
-		j["room3"] = room3.IsWindowOpen();
+		j["room1"] = rooms[0].IsWindowOpen();
+		j["room2"] = rooms[1].IsWindowOpen();
+		j["room3"] = rooms[2].IsWindowOpen();
 
 		std::ofstream file(roomsStateFilename);
 		if (file.is_open())
@@ -156,9 +158,10 @@ private:
 			json j;
 			file >> j;
 
-			room1.SetWindowOpenState(j["room1"].get<bool>());
-			room2.SetWindowOpenState(j["room2"].get<bool>());
-			room3.SetWindowOpenState(j["room3"].get<bool>());
+			for (size_t i = 0; i < rooms.size(); i++)
+			{
+				rooms[i].SetWindowOpenState(j["room" + std::to_string(i + 1)].get<bool>());
+			}
 
 			file.close();
 		}
@@ -170,37 +173,45 @@ public:
 		LoadAllRoomStates();
 	}
 
+	void DrawRoomWindowFor(Room& room, const std::string& title)
+	{
+		room.DrawRoomWindow(title.c_str(), [this]() { SaveAllRoomStates(); });
+	}
+
 	virtual void OnUIRender() override
 	{
 		float windowWidth = ImGui::GetWindowWidth();
 		ImGui::Begin("Hotel A");
 
-		ImGui::SetCursorPosX(windowWidth / 2.0f - 200.0f);
-		if (ImGui::Button("Room 1", ImVec2(75.0f, 0.0f)))
+		const std::array<std::string, 3> roomTitles = {
+			"Hotel A Box - Room 1",
+			"Hotel A Box - Room 2",
+			"Hotel A Box - Room 3"
+		};
+
+		for (size_t i = 0; i < rooms.size(); i++)
 		{
-			room1.ToggleRoomWindowVisibility();
-			SaveAllRoomStates();
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Room 2", ImVec2(75.0f, 0.0f)))
-		{
-			room2.ToggleRoomWindowVisibility();
-			SaveAllRoomStates();
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Room 3", ImVec2(75.0f, 0.0f)))
-		{
-			room3.ToggleRoomWindowVisibility();
-			SaveAllRoomStates();
+			ImGui::SetCursorPosX(windowWidth / 2.0f - (rooms.size() * 75.0f / 2.0f) + (i * 75.0f));
+
+			if (ImGui::Button(("Room " + std::to_string(i + 1)).c_str(), ImVec2(75.0f, 0.0f)))
+			{
+				rooms[i].ToggleRoomWindowVisibility();
+				SaveAllRoomStates();
+			}
+
+			if (i != rooms.size() - 1) // If not the last room button
+				ImGui::SameLine();
 		}
 
 		ImGui::End();
 
-		room1.DrawRoomWindow("Hotel A Box - Room 1", [this]() { this->SaveAllRoomStates(); });
-		room2.DrawRoomWindow("Hotel A Box - Room 2", [this]() { this->SaveAllRoomStates(); });
-		room3.DrawRoomWindow("Hotel A Box - Room 3", [this]() { this->SaveAllRoomStates(); });
+		for (size_t i = 0; i < rooms.size(); i++)
+		{
+			DrawRoomWindowFor(rooms[i], roomTitles[i]);
+		}
 	}
 };
+
 
 
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
