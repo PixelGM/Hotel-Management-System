@@ -17,10 +17,13 @@ using json = nlohmann::json;
 // Global JSON object to hold all client data
 json allClients;
 
-// Save client data to a JSON file
-void SaveToFile(const char* roomFileName, const char* clientName, const char* clientID) {
+void SaveToFile(const char* roomFileName, const char* clientName, const char* clientID, const char* contactNumber, const char* email, const char* passportID, const char* paymentMethod) {
 	allClients[roomFileName]["Client Name"] = clientName;
 	allClients[roomFileName]["Client ID"] = clientID;
+	allClients[roomFileName]["Contact Number"] = contactNumber;
+	allClients[roomFileName]["Email"] = email;
+	allClients[roomFileName]["Passport/ID"] = passportID;
+	allClients[roomFileName]["Payment Method"] = paymentMethod;
 
 	std::ofstream file("AllClients.json");
 	if (file.is_open()) {
@@ -29,13 +32,16 @@ void SaveToFile(const char* roomFileName, const char* clientName, const char* cl
 	}
 }
 
-// Load client data from a JSON file
-void LoadFromFile(const char* roomFileName, char* clientNameBuffer, char* clientIDBuffer) {
+void LoadFromFile(const char* roomFileName, char* clientNameBuffer, char* clientIDBuffer, char* contactNumberBuffer, char* emailBuffer, char* passportIDBuffer, char* paymentMethodBuffer) {
 	std::ifstream file("AllClients.json");
 	if (file.is_open()) {
 		file >> allClients;
 		strcpy(clientNameBuffer, allClients[roomFileName]["Client Name"].get<std::string>().c_str());
 		strcpy(clientIDBuffer, allClients[roomFileName]["Client ID"].get<std::string>().c_str());
+		strcpy(contactNumberBuffer, allClients[roomFileName]["Contact Number"].get<std::string>().c_str());
+		strcpy(emailBuffer, allClients[roomFileName]["Email"].get<std::string>().c_str());
+		strcpy(passportIDBuffer, allClients[roomFileName]["Passport/ID"].get<std::string>().c_str());
+		strcpy(paymentMethodBuffer, allClients[roomFileName]["Payment Method"].get<std::string>().c_str());
 		file.close();
 	}
 }
@@ -57,6 +63,10 @@ private:
 	bool firstOpen = true;
 	char clientName[256] = "";
 	char clientID[256] = "";
+	char contactNumber[256] = "";
+	char email[256] = "";
+	char passportID[256] = "";
+	char paymentMethod[256] = "";
 
 public:
 	Room(const char* roomFileName) : filename(roomFileName) {}
@@ -76,16 +86,20 @@ public:
 
 			if (firstOpen)
 			{
-				LoadFromFile(filename, clientName, clientID);
+				LoadFromFile(filename, clientName, clientID, contactNumber, email, passportID, paymentMethod);
 				firstOpen = false;
 			}
 
-			ImGui::InputText("Insert Client Name", clientName, IM_ARRAYSIZE(clientName));
-			ImGui::InputText("Insert Client ID", clientID, IM_ARRAYSIZE(clientID));
+			ImGui::InputText("Client Name", clientName, IM_ARRAYSIZE(clientName));
+			ImGui::InputText("Client ID", clientID, IM_ARRAYSIZE(clientID));
+			ImGui::InputText("Contact Number", contactNumber, IM_ARRAYSIZE(contactNumber));
+			ImGui::InputText("Email", email, IM_ARRAYSIZE(email));
+			ImGui::InputText("Passport/ID", passportID, IM_ARRAYSIZE(passportID));
+			ImGui::InputText("Payment Method", paymentMethod, IM_ARRAYSIZE(paymentMethod));
 
 			if (ImGui::Button("Save Data"))
 			{
-				SaveToFile(filename, clientName, clientID);
+				SaveToFile(filename, clientName, clientID, contactNumber, email, passportID, paymentMethod);
 				showSaveNotification = true; // Set the flag when data is saved
 				notificationTimer = 0.0f;   // Reset the timer
 			}
@@ -138,7 +152,12 @@ private:
 		{"Room 1", "Hotel A Box - Room 1"},
 		{"Room 2", "Hotel A Box - Room 2"},
 		{"Room 3", "Hotel A Box - Room 3"},
-		{"Room 4", "Hotel A Box - Room 4"}
+		{"Room 4", "Hotel A Box - Room 4"},
+		{"Room 5", "Hotel A Box - Room 5"},
+		{"Room 6", "Hotel A Box - Room 6"},
+		{"Room 7", "Hotel A Box - Room 7"},
+		{"Room 8", "Hotel A Box - Room 8"},
+		{"Room 9", "Hotel A Box - Room 9"}
 		// Add more rooms here...
 	};
 
