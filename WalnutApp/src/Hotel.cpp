@@ -34,24 +34,27 @@ void SaveToFile(const char* roomFileName, const char* clientName, const char* cl
 }
 
 void LoadFromFile(const char* roomFileName, char* clientNameBuffer, char* clientIDBuffer, char* contactNumberBuffer, char* emailBuffer, char* passportIDBuffer, char* paymentMethodBuffer) {
-	std::ifstream file("AllClients.json");
-	if (file.is_open()) {
-		try {
-			file >> allClients;
-			if (allClients.find(roomFileName) != allClients.end()) {
-				json roomData = allClients[roomFileName];
-				if (roomData.find("Client Name") != roomData.end()) {
-					strcpy(clientNameBuffer, roomData["Client Name"].get<std::string>().c_str());
+    std::ifstream file("AllClients.json");
+    if (file.is_open()) {
+        try {
+            file >> allClients;
+            if (allClients.find(roomFileName) != allClients.end()) {
+                json roomData = allClients[roomFileName];
+				if (allClients.find(roomFileName) != allClients.end()) {
+					strcpy(clientNameBuffer, allClients[roomFileName]["Client Name"].get<std::string>().c_str());
+					strcpy(clientIDBuffer, allClients[roomFileName]["Client ID"].get<std::string>().c_str());
+					strcpy(contactNumberBuffer, allClients[roomFileName]["Contact Number"].get<std::string>().c_str());
+					strcpy(emailBuffer, allClients[roomFileName]["Email"].get<std::string>().c_str());
+					strcpy(passportIDBuffer, allClients[roomFileName]["Passport/ID"].get<std::string>().c_str());
+					strcpy(paymentMethodBuffer, allClients[roomFileName]["Payment Method"].get<std::string>().c_str());
 				}
-				// ... (similar checks for other fields)
-			}
-		}
-		catch (json::parse_error& e) {
-			// Handle exceptions here
-			std::cerr << "JSON parse error: " << e.what() << '\n';
-		}
-		file.close();
-	}
+            }
+        } catch (json::parse_error& e) {
+            // Handle exceptions here
+            std::cerr << "JSON parse error: " << e.what() << '\n';
+        }
+        file.close();
+    }
 }
 
 
