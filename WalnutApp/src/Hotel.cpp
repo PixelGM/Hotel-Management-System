@@ -231,10 +231,16 @@ public:
 		room.DrawRoomWindow(title.c_str(), [this]() { SaveAllRoomStates(); });
 	}
 
+	// UI Render
 	virtual void OnUIRender() override
 	{
 		float windowWidth = ImGui::GetWindowWidth();
+		char search[256] = "";
+
 		ImGui::Begin("Hotel A");
+
+		ImGui::SetCursorPosX(windowWidth / 2.0f - 500.0f);
+		ImGui::InputText("Search", search, IM_ARRAYSIZE(search));
 
 		for (size_t i = 0; i < rooms.size(); ++i)
 		{
@@ -250,6 +256,7 @@ public:
 				ImGui::SameLine();
 		}
 
+		
 		ImGui::End();
 
 		for (size_t i = 0; i < rooms.size(); ++i)
