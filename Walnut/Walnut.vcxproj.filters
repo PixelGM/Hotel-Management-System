@@ -21,7 +21,6 @@
     <ClInclude Include="src\Walnut\Layer.h" />
     <ClInclude Include="src\Walnut\Random.h" />
     <ClInclude Include="src\Walnut\Timer.h" />
-    <ClInclude Include="src\Walnut\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Walnut\Application.cpp" />
