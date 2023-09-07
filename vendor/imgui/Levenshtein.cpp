@@ -23,8 +23,7 @@ int levenshtein_distance(const string& s1, const string& s2) {
     return dp[m][n];
 }
 
-// Function to search for a keyword in a list of keywords
-void search_keyword(const std::string& keyword, const std::vector<std::string>& keywords) {
+std::string search_keyword(const std::string& keyword, const std::vector<std::string>& keywords) {
     int min_distance = INT_MAX;
     std::string closest_match;
     int exact_matches = 0;
@@ -40,13 +39,8 @@ void search_keyword(const std::string& keyword, const std::vector<std::string>& 
             closest_match = k;
         }
     }
-
-    if (exact_matches == 1) {
-        ImGui::Text("Exact match found: %s", closest_match.c_str());
-    }
-    else {
-        ImGui::Text("Did you mean: %s?", closest_match.c_str());
-    }
+    return closest_match;
 }
+
 
 

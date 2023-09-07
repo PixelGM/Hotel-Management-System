@@ -237,29 +237,48 @@ public:
 	{
 		float windowWidth = ImGui::GetWindowWidth();
 		char search[256] = "";
-		std::vector<std::string> keywords = { "apple", "banana", "cherry", "date", "elderberry" };
+		std::vector<std::string> roomNames;
+		std::string closestMatch;
 
 		ImGui::Begin("Hotel A");
+
+		// Create a vector of room names based on the number of rooms
+		for (size_t i = 0; i < rooms.size(); ++i) {
+			roomNames.push_back("Room " + std::to_string(i + 1));
+		}
 
 		ImGui::SetCursorPosX(windowWidth / 2.0f - 500.0f);
 		ImGui::InputText("Search", search, IM_ARRAYSIZE(search));
 		if (strlen(search) > 0) {
-			search_keyword(search, keywords);
+			closestMatch = search_keyword(search, roomNames);
 		}
+		ImGui::Text("Search Results: ");
 
-		for (size_t i = 0; i < rooms.size(); ++i)
-		{
+		for (size_t i = 0; i < rooms.size(); ++i) {
+			std::string roomName = "Room " + std::to_string(i + 1);
+
 			ImGui::SetCursorPosX(windowWidth / 2.0f - (rooms.size() * 75.0f / 2.0f) + (i * 75.0f));
 
-			if (ImGui::Button(("Room " + std::to_string(i + 1)).c_str(), ImVec2(75.0f, 0.0f)))
-			{
+			// Change button text color if it's the closest match
+			if (roomName == closestMatch) {
+				ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 0, 0, 255));  // Black color
+			}
+
+			if (ImGui::Button(roomName.c_str(), ImVec2(75.0f, 0.0f))) {
 				rooms[i].ToggleRoomWindowVisibility();
 				SaveAllRoomStates();
 			}
 
-			if (i != rooms.size() - 1)
+			// Reset to default color
+			if (roomName == closestMatch) {
+				ImGui::PopStyleColor();
+			}
+
+			if (i != rooms.size() - 1) {
 				ImGui::SameLine();
+			}
 		}
+
 
 		
 		ImGui::End();
