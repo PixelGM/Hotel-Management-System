@@ -5,8 +5,9 @@
 
 
 #include <fstream>
-#include "Walnut/json.hpp"
 #include <iostream>
+#include "Walnut/json.hpp"
+#include "Levenshtein.h"
 
 // Notes:
 	// Long Button
@@ -236,11 +237,15 @@ public:
 	{
 		float windowWidth = ImGui::GetWindowWidth();
 		char search[256] = "";
+		std::vector<std::string> keywords = { "apple", "banana", "cherry", "date", "elderberry" };
 
 		ImGui::Begin("Hotel A");
 
 		ImGui::SetCursorPosX(windowWidth / 2.0f - 500.0f);
 		ImGui::InputText("Search", search, IM_ARRAYSIZE(search));
+		if (strlen(search) > 0) {
+			search_keyword(search, keywords);
+		}
 
 		for (size_t i = 0; i < rooms.size(); ++i)
 		{
